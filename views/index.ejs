@@ -57,7 +57,7 @@
         const names = {
             africanElephant: 'African Elephant',
             asianElephant: 'Asian Elephant',
-            blueWildebeest: 'blueWildebeest',
+            blueWildebeest: 'Blue Wildebeest',
             africanElephantNewborn: 'Newborn African Elephant',
             asianElephantNewborn: 'Newborn Asian Elephant'
         };
@@ -75,9 +75,30 @@
             }
             outputTypes.sort((a, b) => {return a[1] - b[1]});
             outputTypes.reverse();
-            console.log(outputTypes);
 
-            
+            let inputMass = input * mass[inputType];
+            let outputCountArray = [];
+            for (const i in outputTypes) {
+
+                const count = Math.floor(inputMass / mass[outputTypes[i][0]]);
+                inputMass = inputMass % mass[outputTypes[i][0]];
+                const type = outputTypes[i][0];
+                let outputCountEntry = [type, count];
+                outputCountArray.push(outputCountEntry);
+            }
+
+            let outputString = `${input} ${names[inputType]}${input > 1 ? 's' : ''} weigh the same as `;
+            for (const i in outputCountArray) {
+                
+                const name = names[outputCountArray[i][0]];
+                const count = outputCountArray[i][1];
+                if (count > 0) {
+                    outputString += `${count} ${name}${count > 1 ? 's' : ''}, `;
+                }
+            }
+
+            console.log(outputString);
+            // TODO: Add pluralize for words
         }
 
     </script>
