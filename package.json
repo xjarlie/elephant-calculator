@@ -1,11 +1,16 @@
 {
   "name": "elephant-calculator",
   "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "description": "Convert the most useful and commonly used units",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Charlie Appleton",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.3",
+    "path": "^0.12.7"
+  }
 }

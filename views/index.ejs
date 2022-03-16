@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Elephant Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="container d-flex justify-content-center">
+        <% const animals = {africanElephant: 'African Elephant', asianElephant: 'Asian Elephant', blueWildebeest: 'Blue Wildebeest', africanElephantNewborn: 'Newborn African Elephant', asianElephantNewborn: 'Newborn Asian Elephant'} %> 
+        <div class="col-md-7">
+            <div class="row" style="padding-top: 2rem;">
+                <div class="row" style="padding: 1rem;">
+                    <label for="input" class="form-label">Input Quantity</label>
+                    <input type="number" class="form-control" id="input" placeholder="69" min="0" max="15000" />
+                </div>
+                <div class="row" style="padding: 1rem;">
+                    <label class="form-label" for="inputSelect">Convert from:</label>
+                    <select class="form-select" id="inputSelect">
+                    <% for( const i in animals ) { %>
+                        <option value="<%= i %>"><%= animals[i] %> </option>
+                    <% } %>
+                    </select>
+                </div>
+                <div class="row" style="padding: 1rem;">
+                    <label class="form-label">Convert to:</label>
+                    <% for (const i in animals) { %>
+                        <div class="form-check">
+                            <input class="form-check-input outputCheckbox" type="checkbox" id="<%= i %>">
+                            <label class="form-check-label" for="<%= i %> ">
+                              <%= animals[i] %> 
+                            </label>
+                        </div>
+                    <% } %>
+                </div>
+                <div class="row">
+                    <button type="button" class="btn btn-primary" onclick="calculate()">Convert</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const mass = {
+            africanElephant: 6000,
+            asianElephant: 4000,
+            africanElephantNewborn: 110,
+            asianElephantNewborn: 90,
+            blueWildebeest: 250
+        };
+
+        const names = {
+            africanElephant: 'African Elephant',
+            asianElephant: 'Asian Elephant',
+            blueWildebeest: 'blueWildebeest',
+            africanElephantNewborn: 'Newborn African Elephant',
+            asianElephantNewborn: 'Newborn Asian Elephant'
+        };
+
+        function calculate() {
+            const input = document.querySelector('#input').value;
+            const inputType = document.querySelector('#inputSelect').value;
+
+            const outputs = document.querySelectorAll('.outputCheckbox');
+            let outputTypes = [];
+            for (const i in outputs) {
+                if (outputs[i].checked) {
+                    outputTypes.push([outputs[i].id, mass[outputs[i].id]]);
+                }
+            }
+            console.log(outputTypes);
+
+            
+        }
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
