@@ -7,6 +7,7 @@
     <title>Elephant Calculator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 </head>
 
 <body>
@@ -27,7 +28,7 @@
                                     <option value="<%= i %>">
                                         <%= animals[i] %>
                                     </option>
-                                <% } %>
+                                    <% } %>
                             </select>
                         </div>
                     </div>
@@ -40,13 +41,46 @@
                                     <%= animals[i] %>
                                 </label>
                             </div>
-                        <% } %>
+                            <% } %>
                     </div>
                     <div class="row p-2">
-                        <button type="button" class="btn btn-primary" onclick="calculate()">Convert</button>
+                        <button type="button" class="btn btn-primary" onclick="calculate()" id="calculateBtn"
+                            disabled>Convert</button>
                     </div>
                     <div class="row p-2">
                         <p id="outputDisplay"></p>
+                    </div>
+                    <div class="row p-2">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8 align-items-center">
+                            <div class="row">
+                                <div class="card d-flex flex-row align-items-center">
+                                    <div class="col-3">
+                                        <h1 class="p-1">76</h1>
+                                    </div>
+                                    <div class="col-8">
+                                        <h6 class="p-1">African Elephants</h6>
+                                    </div>
+                                </div>        
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+                    <div class="row p-2">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8 align-items-center">
+                            <div class="row">
+                                <div class="card d-flex flex-row align-items-center">
+                                    <div class="col-3">
+                                        <h1 class="p-1">84</h1>
+                                    </div>
+                                    <div class="col-8">
+                                        <h6 class="p-1">Possums</h6>
+                                    </div>
+                                </div>        
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
                     </div>
                 </div>
             </div>
@@ -55,6 +89,31 @@
     </div>
 
     <script>
+
+        document.querySelector('#input').oninput = btnEnabled;
+        const outputs = document.querySelectorAll('.outputCheckbox');
+        for (const i in outputs) {
+            outputs[i].onchange = btnEnabled;
+        }
+
+        function btnEnabled() {
+            const input = document.querySelector('#input').value;
+            const inputType = document.querySelector('#inputSelect').value;
+
+            const outputs = document.querySelectorAll('.outputCheckbox');
+            let outputTypes = [];
+            for (const i in outputs) {
+                if (outputs[i].checked) {
+                    outputTypes.push([outputs[i].id, mass[outputs[i].id]]);
+                }
+            }
+
+            if (input && inputType && outputTypes.length > 0) {
+                document.querySelector('#calculateBtn').disabled = false;
+            } else {
+                document.querySelector('#calculateBtn').disabled = true;
+            }
+        }
 
         const mass = {
             africanElephant: 6000,
@@ -76,54 +135,57 @@
             const input = document.querySelector('#input').value;
             const inputType = document.querySelector('#inputSelect').value;
 
-            const outputs = document.querySelectorAll('.outputCheckbox');
-            let outputTypes = [];
-            for (const i in outputs) {
-                if (outputs[i].checked) {
-                    outputTypes.push([outputs[i].id, mass[outputs[i].id]]);
-                }
-            }
-            outputTypes.sort((a, b) => { return a[1] - b[1] });
-            outputTypes.reverse();
-
-            let inputMass = input * mass[inputType];
-            let outputCountArray = [];
-            for (const i in outputTypes) {
-
-                const count = Math.floor(inputMass / mass[outputTypes[i][0]]);
-                inputMass = inputMass % mass[outputTypes[i][0]];
-                const type = outputTypes[i][0];
-                let outputCountEntry = [type, count];
-                outputCountArray.push(outputCountEntry);
-            }
-
-            let outputString = `${input} ${names[inputType]}${input > 1 ? 's' : ''} weigh the same as `;
-            outputCountArray = outputCountArray.filter(item => item[1] != 0);
-            console.log(outputCountArray.length, outputCountArray);
-            for (const i in outputCountArray) {
-
-                const name = names[outputCountArray[i][0]];
-                const count = outputCountArray[i][1];
-
-                if (i >= outputCountArray.length-2) {
-                    if (i >= (outputCountArray.length - 1)) {
-                        console.log('last', name)
-                        outputString += `${count} ${name}${count > 1 ? 's' : ''}.`;
-                    } else {
-                        console.log('second to last', name);
-                        outputString += `${count} ${name}${count > 1 ? 's' : ''} and `;
+            if (input && inputType) {
+                const outputs = document.querySelectorAll('.outputCheckbox');
+                let outputTypes = [];
+                for (const i in outputs) {
+                    if (outputs[i].checked) {
+                        outputTypes.push([outputs[i].id, mass[outputs[i].id]]);
                     }
-                } else {
-                    console.log('other', name);
-                    outputString += `${count} ${name}${count > 1 ? 's' : ''}, `;
                 }
+                outputTypes.sort((a, b) => { return a[1] - b[1] });
+                outputTypes.reverse();
+
+                let inputMass = input * mass[inputType];
+                let outputCountArray = [];
+                for (const i in outputTypes) {
+
+                    const count = Math.floor(inputMass / mass[outputTypes[i][0]]);
+                    inputMass = inputMass % mass[outputTypes[i][0]];
+                    const type = outputTypes[i][0];
+                    let outputCountEntry = [type, count];
+                    outputCountArray.push(outputCountEntry);
+                }
+
+                let outputString = `${input} ${names[inputType]}${input > 1 ? 's' : ''} weigh the same as `;
+                outputCountArray = outputCountArray.filter(item => item[1] != 0);
+                console.log(outputCountArray.length, outputCountArray);
+                for (const i in outputCountArray) {
+
+                    const name = names[outputCountArray[i][0]];
+                    const count = outputCountArray[i][1];
+
+                    if (i >= outputCountArray.length - 2) {
+                        if (i >= (outputCountArray.length - 1)) {
+                            console.log('last', name)
+                            outputString += `${count} ${name}${count > 1 ? 's' : ''}.`;
+                        } else {
+                            console.log('second to last', name);
+                            outputString += `${count} ${name}${count > 1 ? 's' : ''} and `;
+                        }
+                    } else {
+                        console.log('other', name);
+                        outputString += `${count} ${name}${count > 1 ? 's' : ''}, `;
+                    }
+                }
+
+                console.log(outputString);
+                document.querySelector('#outputDisplay').textContent = outputString;
+                // TODO: display results in collapsible
             }
 
-            console.log(outputString);
-            document.querySelector('#outputDisplay').textContent = outputString;
-            // TODO: Add pluralize for words
         }
-        
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
