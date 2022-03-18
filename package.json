@@ -4,7 +4,8 @@
   "description": "Convert the most useful and commonly used units",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon"
+    "start": "nodemon",
+    "build": "docker build . -t xjarlie/elephant-calculator  && docker push xjarlie/elephant-calculator"
   },
   "author": "Charlie Appleton",
   "license": "ISC",

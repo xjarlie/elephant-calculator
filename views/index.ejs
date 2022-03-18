@@ -48,17 +48,17 @@
                             disabled>Convert</button>
                     </div>
                     <div class="row p-2">
-                        <p id="outputDisplay"></p>
-                    </div>
-                    <div class="row p-2">
                         <div class="col-md-2"></div>
                         <div class="col-md-8 align-items-center">
+                            <div class="row align-items-center">
+                                <p id="stringDisplay"></p>
+                            </div>
                             <div class="row">
                                 <div class="card d-flex flex-row align-items-center">
-                                    <div class="col-3">
+                                    <div class="col-3 align-items-center">
                                         <h1 class="p-1">76</h1>
                                     </div>
-                                    <div class="col-8">
+                                    <div class="col-8 align-items-center">
                                         <h6 class="p-1">African Elephants</h6>
                                     </div>
                                 </div>        
@@ -68,7 +68,7 @@
                     </div>
                     <div class="row p-2">
                         <div class="col-md-2"></div>
-                        <div class="col-md-8 align-items-center">
+                        <div class="col-md-8 align-items-center" id="resultsDiv">
                             <div class="row">
                                 <div class="card d-flex flex-row align-items-center">
                                     <div class="col-3">
@@ -157,31 +157,10 @@
                     outputCountArray.push(outputCountEntry);
                 }
 
-                let outputString = `${input} ${names[inputType]}${input > 1 ? 's' : ''} weigh the same as `;
+                document.querySelector('#stringDisplay').textContent = `${input} ${names[inputType]}${input > 1 ? 's' : ''} weigh${!(input > 1) ? 's' : ''} the same as `;
                 outputCountArray = outputCountArray.filter(item => item[1] != 0);
-                console.log(outputCountArray.length, outputCountArray);
-                for (const i in outputCountArray) {
 
-                    const name = names[outputCountArray[i][0]];
-                    const count = outputCountArray[i][1];
 
-                    if (i >= outputCountArray.length - 2) {
-                        if (i >= (outputCountArray.length - 1)) {
-                            console.log('last', name)
-                            outputString += `${count} ${name}${count > 1 ? 's' : ''}.`;
-                        } else {
-                            console.log('second to last', name);
-                            outputString += `${count} ${name}${count > 1 ? 's' : ''} and `;
-                        }
-                    } else {
-                        console.log('other', name);
-                        outputString += `${count} ${name}${count > 1 ? 's' : ''}, `;
-                    }
-                }
-
-                console.log(outputString);
-                document.querySelector('#outputDisplay').textContent = outputString;
-                // TODO: display results in collapsible
             }
 
         }
