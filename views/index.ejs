@@ -47,40 +47,28 @@
                         <button type="button" class="btn btn-primary" onclick="calculate()" id="calculateBtn"
                             disabled>Convert</button>
                     </div>
-                    <div class="row p-2">
-                        <div class="col-md-2"></div>
-                        <div class="col-md-8 align-items-center">
-                            <div class="row align-items-center">
-                                <p id="stringDisplay"></p>
-                            </div>
-                            <div class="row">
-                                <div class="card d-flex flex-row align-items-center">
-                                    <div class="col-3 align-items-center">
-                                        <h1 class="p-1">76</h1>
-                                    </div>
-                                    <div class="col-8 align-items-center">
-                                        <h6 class="p-1">African Elephants</h6>
-                                    </div>
-                                </div>        
-                            </div>
+                    <div class="row">
+                        <div class="row align-items-center">
+                            <p id="stringDisplay"></p>
                         </div>
-                        <div class="col-md-2"></div>
                     </div>
-                    <div class="row p-2">
-                        <div class="col-md-2"></div>
-                        <div class="col-md-8 align-items-center" id="resultsDiv">
-                            <div class="row">
-                                <div class="card d-flex flex-row align-items-center">
-                                    <div class="col-3">
-                                        <h1 class="p-1">84</h1>
+                    <div class="row" id="resultsDiv">
+                        <div class="row p-2">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8 align-items-center">
+                                <div class="row">
+                                    <div class="card d-flex flex-row align-items-center">
+                                        <div class="col-3 align-items-center">
+                                            <h1 class="p-1">76</h1>
+                                        </div>
+                                        <div class="col-8 align-items-center">
+                                            <h6 class="p-1">African Elephants</h6>
+                                        </div>
                                     </div>
-                                    <div class="col-8">
-                                        <h6 class="p-1">Possums</h6>
-                                    </div>
-                                </div>        
+                                </div>
                             </div>
+                            <div class="col-md-2"></div>
                         </div>
-                        <div class="col-md-2"></div>
                     </div>
                 </div>
             </div>
@@ -160,9 +148,35 @@
                 document.querySelector('#stringDisplay').textContent = `${input} ${names[inputType]}${input > 1 ? 's' : ''} weigh${!(input > 1) ? 's' : ''} the same as `;
                 outputCountArray = outputCountArray.filter(item => item[1] != 0);
 
+                for (const i in outputCountArray) {
+                    const num = outputCountArray[i][1];
+                    const animal = names[outputCountArray[i][0]];
+
+                    document.querySelector('#resultsDiv').append(createResult(animal, num));
+                }
 
             }
 
+        }
+
+        function createResult(animal, count) {
+            const el = document.createElement('div');
+            el.classList.add('row');
+            el.classList.add('p-2');
+            el.innerHTML += '<div class="col-md-2"></div>';
+            el.innerHTML += `<div class="col-md-8 align-items-center">
+                                <div class="row">
+                                    <div class="card d-flex flex-row align-items-center">
+                                        <div class="col-3 align-items-center">
+                                            <h1 class="p-1">${count}</h1>
+                                        </div>
+                                        <div class="col-8 align-items-center">
+                                            <h6 class="p-1">${animal}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+            return el;
         }
 
     </script>
