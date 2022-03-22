@@ -37,20 +37,22 @@
                         <% for (const i in animals) { %>
                             <div class="form-check">
                                 <input class="form-check-input outputCheckbox" type="checkbox" id="<%= i %>">
-                                <label class="form-check-label" for="<%= i %>">
+                                <label class="form-check-label" for="<%= i %>" data-bs-toggle="tooltip" data-bs-placement="right"
+                                    title="~<%= mass[i] %>kg">
                                     <%= animals[i] %>
                                 </label>
                             </div>
                             <% } %>
-                        <row class="p-1" style="font-size: 0.9rem;">
-                            <a href="/sources">View sources</a>
-                        </row>
-                        <div class="row p-1">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="roundSwitch" checked>
-                                <label class="form-check-label" for="roundSwitch">Round output to nearest whole animal</label>
-                            </div>
-                        </div>
+                                <row class="p-1" style="font-size: 0.9rem;">
+                                    <a href="/sources">View sources</a>
+                                </row>
+                                <div class="row p-1">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="roundSwitch" checked>
+                                        <label class="form-check-label" for="roundSwitch">Round output to nearest whole
+                                            animal</label>
+                                    </div>
+                                </div>
                     </div>
                     <div class="row p-2">
                         <button type="button" class="btn btn-primary" onclick="calculate()" id="calculateBtn"
@@ -75,23 +77,32 @@
     <script src="public/pluralize.js"></script>
     <script>
 
-        const mass = {
-            africanElephant: 7000,
-            asianElephant: 5500,
-            africanElephantNewborn: 110,
-            asianElephantNewborn: 90,
-            blueWildebeest: 250,
-            llama: 113
-        };
-
         const names = {
             africanElephant: 'African Elephant',
             asianElephant: 'Asian Elephant',
             blueWildebeest: 'Blue Wildebeest',
             africanElephantNewborn: 'Newborn African Elephant',
             asianElephantNewborn: 'Newborn Asian Elephant',
-            llama: 'Llama'
+            llama: 'Llama',
+            gibbon: 'Gibbon',
+            vampireBat: 'Vampire Bat'
+        }
+
+        const mass = {
+            africanElephant: 7000,
+            asianElephant: 5500,
+            africanElephantNewborn: 110,
+            asianElephantNewborn: 90,
+            blueWildebeest: 250,
+            llama: 113,
+            gibbon: 13,
+            vampireBat: 0.06
         };
+
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
 
         document.querySelector('#input').oninput = btnEnabled;
         const outputs = document.querySelectorAll('.outputCheckbox');

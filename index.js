@@ -15,7 +15,9 @@ const animals = {
     blueWildebeest: 'Blue Wildebeest', 
     africanElephantNewborn: 'Newborn African Elephant',
     asianElephantNewborn: 'Newborn Asian Elephant',
-    llama: 'Llama'
+    llama: 'Llama',
+    gibbon: 'Gibbon',
+    vampireBat: 'Vampire Bat'
 }
 
 const mass = {
@@ -24,7 +26,9 @@ const mass = {
     africanElephantNewborn: 110,
     asianElephantNewborn: 90,
     blueWildebeest: 250,
-    llama: 113
+    llama: 113,
+    gibbon: 13,
+    vampireBat: 0.06
 };
 
 app.get('/', (req, res) => {
@@ -35,7 +39,9 @@ const sources = [
     ['African Elephant', 'https://www.nationalgeographic.com/animals/mammals/facts/african-elephant'],
     ['Asian Elephant', 'https://www.nationalgeographic.com/animals/mammals/facts/asian-elephant'],
     ['Llama', 'https://www.nationalgeographic.com/animals/mammals/facts/llama-1'],
-    ['Blue Wildebeest', 'https://www.nationalgeographic.com/animals/mammals/facts/blue-wildebeest']
+    ['Blue Wildebeest', 'https://www.nationalgeographic.com/animals/mammals/facts/blue-wildebeest'],
+    ['Gibbon', 'https://www.nationalgeographic.com/animals/mammals/facts/gibbons'],
+    ['Vampire Bat', 'https://kids.nationalgeographic.com/animals/mammals/facts/vampire-bat']
 ];
 
 app.get('/sources', (req, res) => {
