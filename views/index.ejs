@@ -19,7 +19,7 @@
                     <div class="row p-2">
                         <div class="col-md-7">
                             <label for="input" class="form-label">Input Quantity</label>
-                            <input type="number" class="form-control" id="input" placeholder="69" min="0" max="15000" />
+                            <input type="number" class="form-control" id="input" placeholder="69" min="0" />
                         </div>
                         <div class="col-md-5">
                             <label class="form-label" for="inputSelect">Convert from:</label>
@@ -42,6 +42,15 @@
                                 </label>
                             </div>
                             <% } %>
+                        <row class="p-1" style="font-size: 0.9rem;">
+                            <a href="/sources">View sources</a>
+                        </row>
+                        <div class="row p-1">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="roundSwitch" checked>
+                                <label class="form-check-label" for="roundSwitch">Round output to nearest whole animal</label>
+                            </div>
+                        </div>
                     </div>
                     <div class="row p-2">
                         <button type="button" class="btn btn-primary" onclick="calculate()" id="calculateBtn"
@@ -54,20 +63,7 @@
                     </div>
                     <div class="row" id="resultsDiv">
                         <div class="row p-2">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-8 align-items-center">
-                                <div class="row">
-                                    <div class="card d-flex flex-row align-items-center">
-                                        <div class="col-3 align-items-center">
-                                            <h1 class="p-1">76</h1>
-                                        </div>
-                                        <div class="col-8 align-items-center">
-                                            <h6 class="p-1">African Elephants</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2"></div>
+
                         </div>
                     </div>
                 </div>
@@ -76,7 +72,26 @@
         </div>
     </div>
 
+    <script src="public/pluralize.js"></script>
     <script>
+
+        const mass = {
+            africanElephant: 7000,
+            asianElephant: 5500,
+            africanElephantNewborn: 110,
+            asianElephantNewborn: 90,
+            blueWildebeest: 250,
+            llama: 113
+        };
+
+        const names = {
+            africanElephant: 'African Elephant',
+            asianElephant: 'Asian Elephant',
+            blueWildebeest: 'Blue Wildebeest',
+            africanElephantNewborn: 'Newborn African Elephant',
+            asianElephantNewborn: 'Newborn Asian Elephant',
+            llama: 'Llama'
+        };
 
         document.querySelector('#input').oninput = btnEnabled;
         const outputs = document.querySelectorAll('.outputCheckbox');
@@ -103,25 +118,12 @@
             }
         }
 
-        const mass = {
-            africanElephant: 6000,
-            asianElephant: 4000,
-            africanElephantNewborn: 110,
-            asianElephantNewborn: 90,
-            blueWildebeest: 250
-        };
 
-        const names = {
-            africanElephant: 'African Elephant',
-            asianElephant: 'Asian Elephant',
-            blueWildebeest: 'Blue Wildebeest',
-            africanElephantNewborn: 'Newborn African Elephant',
-            asianElephantNewborn: 'Newborn Asian Elephant'
-        };
 
         function calculate() {
             const input = document.querySelector('#input').value;
             const inputType = document.querySelector('#inputSelect').value;
+            const round = document.querySelector('#roundSwitch').checked;
 
             if (input && inputType) {
                 const outputs = document.querySelectorAll('.outputCheckbox');
@@ -138,21 +140,49 @@
                 let outputCountArray = [];
                 for (const i in outputTypes) {
 
-                    const count = Math.floor(inputMass / mass[outputTypes[i][0]]);
-                    inputMass = inputMass % mass[outputTypes[i][0]];
-                    const type = outputTypes[i][0];
-                    let outputCountEntry = [type, count];
-                    outputCountArray.push(outputCountEntry);
+                    if (round === true) {
+                        let initialCount = inputMass / mass[outputTypes[i][0]];
+                        let count;
+                        if (initialCount < 0.5) {
+                            count = '~0';
+                        } else {
+                            count = Math.floor(initialCount);
+                        }
+                        inputMass = inputMass % mass[outputTypes[i][0]];
+                        const type = outputTypes[i][0];
+                        const outputCountEntry = [type, count];
+                        outputCountArray.push(outputCountEntry);
+                    } else {
+                        if (inputMass > 0) {
+                            const count = Math.round((inputMass / mass[outputTypes[i][0]]) * 100) / 100;
+                            inputMass -= Math.round(mass[outputTypes[i][0]] * count);
+                            console.log('lol', inputMass);
+                            const type = outputTypes[i][0];
+                            const outputCountEntry = [type, count];
+                            outputCountArray.push(outputCountEntry);
+                        }
+                    }
+                }
+
+                let exact;
+                if (inputMass === 0 && round === false) {
+                    exact = true;
                 }
 
                 document.querySelector('#stringDisplay').textContent = `${input} ${names[inputType]}${input > 1 ? 's' : ''} weigh${!(input > 1) ? 's' : ''} the same as `;
-                outputCountArray = outputCountArray.filter(item => item[1] != 0);
+                // outputCountArray = outputCountArray.filter(item => item[1] != 0);
 
+                document.querySelector('#resultsDiv').innerHTML = '';
                 for (const i in outputCountArray) {
                     const num = outputCountArray[i][1];
                     const animal = names[outputCountArray[i][0]];
 
-                    document.querySelector('#resultsDiv').append(createResult(animal, num));
+                    if (num > 1e+20) {
+                        alert('Number too big sry')
+                    } else {
+                        document.querySelector('#resultsDiv').append(createResult(animal, num));
+                    }
+
                 }
 
             }
@@ -166,16 +196,17 @@
             el.innerHTML += '<div class="col-md-2"></div>';
             el.innerHTML += `<div class="col-md-8 align-items-center">
                                 <div class="row">
-                                    <div class="card d-flex flex-row align-items-center">
-                                        <div class="col-3 align-items-center">
+                                    <div class="card d-flex flex-row align-items-center clearfix">
+                                        <div class="float-sm-start align-items-center">
                                             <h1 class="p-1">${count}</h1>
                                         </div>
-                                        <div class="col-8 align-items-center">
-                                            <h6 class="p-1">${animal}</h6>
+                                        <div class="float-sm-end align-items-center">
+                                            <h6 class="p-1">${pluralize(animal, count)}</h6>
                                         </div>
                                     </div>
                                 </div>
                             </div>`;
+            el.innerHTML += '<div class="col-md-2"></div>';
             return el;
         }
 
