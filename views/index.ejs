@@ -15,21 +15,38 @@
         <div class="row p-3 d-flex">
             <div class="col-md-2"></div>
             <div class="col-md-8">
+                <div class="row p-2 text-center">
+                    <h1 class="display-1">The Elephant Calculator</h1>
+                </div>
+                <div class="row p-2 text-center">
+                    <h5>By <a href="https://github.com/xjarlie" target="__blank">Xjarlie</a></h5>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <div class="row p-3 d-flex">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
                 <div class="row">
                     <div class="row p-2">
                         <div class="col-md-7">
-                            <label for="input" class="form-label">Input Quantity</label>
-                            <input type="number" class="form-control" id="input" placeholder="69" min="0" />
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="input"
+                                    placeholder="69">
+                                <label for="floatingInput">Enter quantity</label>
+                            </div>
                         </div>
                         <div class="col-md-5">
-                            <label class="form-label" for="inputSelect">Convert from:</label>
-                            <select class="form-select" id="inputSelect">
-                                <% for( const i in animals ) { %>
-                                    <option value="<%= i %>">
-                                        <%= animals[i] %>
-                                    </option>
-                                    <% } %>
-                            </select>
+                            <!-- <label class="form-label" for="inputSelect">Convert from:</label> -->
+                            <div class="form-floating">
+                                <select class="form-select p-2" id="inputSelect">
+                                    <% for( const i in pluralAnimals ) { %>
+                                        <option value="<%= i %>">
+                                            <%= pluralAnimals[i] %>
+                                        </option>
+                                        <% } %>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="row p-2">
@@ -37,10 +54,12 @@
                         <% for (const i in animals) { %>
                             <div class="form-check">
                                 <input class="form-check-input outputCheckbox" type="checkbox" id="<%= i %>">
-                                <label class="form-check-label" for="<%= i %>" data-bs-toggle="tooltip" data-bs-placement="right"
-                                    title="~<%= mass[i] %>kg">
+                                <label class="form-check-label" for="<%= i %>">
                                     <%= animals[i] %>
                                 </label>
+                                &nbsp;
+                                <i class="bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right"
+                                    title="~<%= mass[i] %>kg" style="color: #b1b1b1;"></i>
                             </div>
                             <% } %>
                                 <row class="p-1" style="font-size: 0.9rem;">
@@ -53,6 +72,7 @@
                                             animal</label>
                                     </div>
                                 </div>
+
                     </div>
                     <div class="row p-2">
                         <button type="button" class="btn btn-primary" onclick="calculate()" id="calculateBtn"
@@ -74,6 +94,9 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
     <script src="public/pluralize.js"></script>
     <script>
 
@@ -101,8 +124,17 @@
 
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
+            return new bootstrap.Tooltip(tooltipTriggerEl, {
+                popperConfig: function (defaultBsPopperConfig) {
+                    // var newPopperConfig = {...}
+                    // use defaultBsPopperConfig if needed...
+                    // return newPopperConfig
+                    return {
+                        delay: { show: 500, hide: 100 }
+                    };
+                }
+            })
+        });
 
         document.querySelector('#input').oninput = btnEnabled;
         const outputs = document.querySelectorAll('.outputCheckbox');
@@ -137,6 +169,7 @@
             const round = document.querySelector('#roundSwitch').checked;
 
             if (input && inputType) {
+
                 const outputs = document.querySelectorAll('.outputCheckbox');
                 let outputTypes = [];
                 for (const i in outputs) {
@@ -195,6 +228,7 @@
                     }
 
                 }
+                document.querySelector('#resultsDiv').scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             }
 

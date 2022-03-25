@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const pluralize = require('pluralize');
 const app = express();
 const port = 3000;
 
@@ -31,8 +32,13 @@ const mass = {
     vampireBat: 0.06
 };
 
+let pluralAnimals = {};
+for (const i in animals) {
+    pluralAnimals[i] = pluralize(animals[i]);
+}
+
 app.get('/', (req, res) => {
-    res.render('index', { animals, mass });
+    res.render('index', { animals, mass, pluralAnimals });
 });
 
 const sources = [
